@@ -1,0 +1,29 @@
+{
+  "name": "ai-agent",
+  "version": "1.0.0",
+  "description": "A basic version of `ai-agent` that is build by following the [boot.dev](https://www.boot.dev/courses/build-ai-agent-python) course.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --env-file=.env main.ts",
+    "dev": "node --env-file=.env --watch main.ts",
+    "build": "tsc",
+    "test": "node --test functions.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaustubh-2406/basic-ai-agent.git"
+  },
+  "keywords": [],
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/kaustubh-2406/basic-ai-agent/issues"
+  },
+  "homepage": "https://github.com/kaustubh-2406/basic-ai-agent#readme",
+  "dependencies": {
+    "openai": "^7.30.0",
+    "typescript": "^7.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4"
+  }
+}

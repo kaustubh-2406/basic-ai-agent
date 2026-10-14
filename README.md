@@ -1,36 +1,61 @@
 # Build your own ai-agent
 
-A basic version of `ai-agent` that is build by following the [boot.dev](https://www.boot.dev/courses/build-ai-agent-python) course.
+A basic version of `ai-agent` built by following the [boot.dev](https://www.boot.dev/courses/build-ai-agent-python) course, ported from Python to TypeScript.
+
+> This is a personal exploration project, not production software. Expect rough edges and breaking changes.
 
 ## Basic introduction
 
 ```bash
-├── `calculator/` # calculator is basic setup that is for testing agent & tools
-├── `functions/` # tool definations
-├── main.py
+├── calculator/        # small Python project the agent works on (its sandbox)
+├── functions/         # tool definitions and implementations
+├── call_function.ts   # dispatches tool calls from the model
+├── prompts.ts         # system prompt
+├── main.ts            # agent loop
 └── README.md
 ```
 
-## How to test
+The agent talks to OpenRouter (`openrouter/free` model) and can list files, read files, write files and run Python files. All tool calls are restricted to `calculator/`.
 
-To test out the agent thing u can run some of the prompts to see how the agent performs
-
-1. `uv run main.py "write 'hello' to main.txt"`
-
-Expect the calculator/main.txt to have contnent "hello"
-
-2. You can try to introduce a bug in `calculator/` folder and try testing / debugging with agent.
-
-One example of this can be:
+## Setup
 
 ```bash
-# in the calculator/calculator.py can try modifying the precendence of '+' to 3.
-# this introduces a bug, and u can run the following comamnd to try fixing it.
-$ uv run main.py "Fix the bug: 3 + 7 * 2 shouldn't be 20." --verbose
+pnpm install
+echo "OPENROUTER_API_KEY=<your key>" > .env
+pnpm build
 ```
 
-## Future plans:
+## Usage
 
+```bash
+node --env-file=.env dist/main.js "<prompt>" [-v | --verbose]
+```
+
+`-v` prints the prompt, each tool result and token usage. The agent stops after 20 turns.
+
+## Tests
+
+```bash
+pnpm test
+```
+
+Runs `functions.test.ts` against the tools in `calculator/`. Needs `python` on your PATH.
+
+## Trying the agent
+
+1. `node --env-file=.env dist/main.js "write 'hello' to main.txt"`
+
+   Expect `calculator/main.txt` to contain "hello".
+
+2. Introduce a bug in `calculator/` and ask the agent to fix it. For example, change the precedence of `+` to 3 in `calculator/pkg/calculator.py`, then run:
+
+   ```bash
+   node --env-file=.env dist/main.js "Fix the bug: 3 + 7 * 2 shouldn't be 20." --verbose
+   ```
+
+## Future plans
+
+- [ ] Convert to Effect
 - [ ] Maybe introduce a web search tool.
-- [ ] Watch a file / process / command.. and trigger a workflow based on that.
-- [ ] Mcp support can be intersting to implement. (However, can be too much work 😅)
+- [ ] Watch a file / process / command and trigger a workflow based on that.
+- [ ] MCP support could be interesting to implement. (However, can be too much work 😅)
